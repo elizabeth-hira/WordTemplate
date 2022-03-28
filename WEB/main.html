@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lab1 part2</title>
+    <link rel="stylesheet" href="style.css">
+    <script src ="eel.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <h1>Гиро Елизавета Олеговна</h1>
+    <h2>3 курс 12 группа</h2>
+    <h2>2021</h2>
+
+    <table border="1">
+    <caption>Введите значения</caption>
+   <tr>
+    <th>Mission</th>
+    <th>Next Step</th>
+    <th>Begin Date</th>
+    <th>Percent of completion</th>
+   </tr>
+   <tr>
+       <td>
+           <input id="inputMission" type="text" placeholder="input mission name">
+       </td>
+       <td>
+           <input id="inputStep" type="text" placeholder="input next step">
+       </td>
+       <td>
+           <input id="inputDate" type="date" placeholder="input begin date">
+       </td>
+       <td>
+           <input id="inputPercentage" type="text" placeholder="input percentage of completion">
+       </td>
+   </tr>
+    </table>
+    <button id="add_btn">add row to table</button>
+
+    <div id="table"></div>
+    <br>
+    <div><input id="inputNum" type="text" placeholder="Enter num of rows"><button id="show_t">show table</button></div>
+    <br><br>
+    <div>
+    <div>
+    <input type="radio" id="mission_radio" name="param" value="Mission">
+    <label for="mission_radio">Mission</label><br>
+    <input type="radio" id="step_radio" name="param" value="Next step">
+    <label for="step_radio">Next Step</label><br>
+    <input type="radio" id="date_radio" name="param" value="Begin date">
+    <label for="date_radio">Begin Date</label><br>
+    <input type="radio" id="percent_radio" name="param" value="Percent of completion">
+    <label for="percent_radio">Percent of completion</label><br><br>
+    </div>
+        <input type="checkbox" id="Ascending" name="Ascending">
+        <label for="Ascending">Ascending</label>
+        <button id="sort_btn">Sort</button>
+    </div>
+    <br><br>
+    <div>
+        <div>
+            <label for="file">Choose template to upload</label>
+            <input type="file" id="file" name="file" accept=".dotx, .docx">
+        </div>
+    </div>
+    <button id="open_temp">Open template</button>
+
+
+
+    <script type="text/javascript">
+        async function display_table() {
+            let num = document.getElementById('inputNum').value;
+            let res = await eel.get_short_table(num)();
+            console.log(res);
+            document.getElementById('table').innerHTML = res;
+        }
+        async function sort_table() {
+            let paramSort = document.querySelector('input[name="param"]:checked').value;
+            let asc = document.getElementById('Ascending').checked;
+            let res = await eel.sort_table(paramSort, asc)();
+            console.log(res);
+            document.getElementById('table').innerHTML = res;
+        }
+        async function open_file() {
+            var filePath=document.getElementById('file').value;
+            console.log(filePath)
+            await eel.open_file(filePath)();
+        }
+        async function add_row() {
+            let inputMission=document.getElementById('inputMission').value;
+            let inputStep=document.getElementById('inputStep').value;
+            let inputDate=document.getElementById('inputDate').value;
+            let inputPercentage=document.getElementById('inputPercentage').value;
+            console.log(inputDate)
+            let res = await eel.add_row(inputMission, inputStep, inputDate, inputPercentage)();
+            document.getElementById('table').innerHTML = res;
+        }
+
+
+        jQuery('#show_t').on('click', function() {
+            display_table();
+        });
+        jQuery('#sort_btn').on('click', function() {
+            sort_table();
+        });
+        jQuery('#open_temp').on('click', function() {
+            open_file();
+        });
+        jQuery('#add_btn').on('click', function() {
+            add_row();
+        });
+    </script>
+</body>
+</html>
